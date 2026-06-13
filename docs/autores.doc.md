@@ -8,7 +8,7 @@ Cenários:
 
 - Retorna os dados do autor cadastrado quando os dados são válidos (201).
 
-- Retorna um erro ao tentar cadastrar um usuário com dados inválidos (400).
+- Retorna um erro ao tentar cadastrar autores com dados inválidos (400).
 
 ## Recuperar um Autor
 
