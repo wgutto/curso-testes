@@ -5,7 +5,7 @@ import { describe, test } from "node:test"
 describe("Autor", () => {
   describe("constructor", () => {
     test("Cria uma instância de Autor com todos os campos", () => {
-    // arrange
+    // arrange = preparação dos dados para o teste
     const dadosDoAutor = {
       id: 1,
       nome: "João Silva",
@@ -14,10 +14,10 @@ describe("Autor", () => {
       updated_at: "2024-06-01T12:00:00Z",
     }
 
-    // act
+    // act = ação de criar a instância do autor
     const autor = new Autor(dadosDoAutor)
 
-    // assert
+    // assert = verificação se os dados do autor foram atribuídos corretamente
     assert.strictEqual(autor.id, dadosDoAutor.id)
     assert.strictEqual(autor.nome, dadosDoAutor.nome)
     assert.strictEqual(autor.nacionalidade, dadosDoAutor.nacionalidade)
@@ -43,5 +43,29 @@ describe("Autor", () => {
     assert(typeof autor.created_at === "string")
     assert(typeof autor.updated_at === "string")
   })
+  })
+
+  describe("pegarAutores", () => {
+    test("Deve retornar uma lista de autores", async () => {
+      // arrange
+      const autoresEsperados = [
+        { id: 1, nome: "João Silva", nacionalidade: "Brasileira", created_at: new Date().toISOString(), updated_at: new Date().toISOString() },
+      ]
+
+      const dbMock = {
+        select: () => {
+          return {
+            from: () => Promise.resolve(autoresEsperados) // o Promise.resolve é usado para simular uma função assíncrona que retorna uma promessa resolvida com os autores esperados
+          }
+        }
+      }
+      Autor.configurarDB(dbMock)
+
+      // act
+      const autores = await Autor.pegarAutores()
+
+      // assert
+      assert.deepStrictEqual(autores, autoresEsperados) // o deepStrictEqual é usado para comparar objetos e arrays, verificando se os valores são iguais
+    })
   })
 })
