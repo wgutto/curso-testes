@@ -8,6 +8,7 @@ const taxas = {
 
 export function calcularValorVenda(valor, modoPagamento) {
   const multiplicador = taxas[modoPagamento];
+
   if (multiplicador === undefined) {
     throw new Error(`Modo de pagamento inválido: ${modoPagamento}`);
   }
