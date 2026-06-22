@@ -14,13 +14,22 @@ describe("VendaService", () => {
   describe("registrarVenda", () => {
     test("Deve registrar uma venda com sucesso e enviar um email para a editora", async () => {
       // arrange
+      // Mock do EmailGateway para verificar se o método enviarEmail foi chamado corretamente
       const emailGatewayMock = {
         enviarEmail: mock.fn(),
       }
-      const sut = new VendasService(conexao, emailGatewayMock);
+
+      // Stub do EstoqueApiGateway para simular que o livro tem estoque
+      const estoqueApiGatewayMock = {
+        temEstoque: mock.fn(() => Promise.resolve(true)),
+      }
+
+      const sut = new VendasService(conexao, emailGatewayMock, estoqueApiGatewayMock);
+
       const editora = await criarEditora({
         email: 'editora@teste.com'
       })
+      
       const livro = await criarLivro({
         titulo: "Livro de Teste",
         editora_id: editora.id,
