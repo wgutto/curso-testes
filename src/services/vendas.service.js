@@ -5,11 +5,11 @@ import Livro from "#models/livro.js";
 import Venda from "#models/venda.js";
 
 export class VendasService {
-  constructor(databaseConnection) {
+  constructor(databaseConnection, emailGateway =  new EmailGateway()) {
     Venda.configurarDB(databaseConnection);
     Livro.configurarDB(databaseConnection);
     Editora.configurarDB(databaseConnection);
-    this.emailGateway = new EmailGateway();
+    this.emailGateway = emailGateway;
   }
 
   async registrarVenda({ idLivro, modoPagamento, valor }) {
