@@ -3,7 +3,7 @@ import request from "supertest";
 import conexao from "#db/singleton-connection.js";
 import app from "#src/app.js";
 import assert from "assert";
-import { criarLivro } from "../factories/livro.factory";
+import { criarLivro } from "#test/factories/livro.factory.js";
 
 describe('Registrar venda', () => {
   // Fecha a conexão com o banco de dados após os testes para evitar conexões pendentes
