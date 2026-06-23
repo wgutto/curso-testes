@@ -1,10 +1,12 @@
 import { describe, test, after } from "node:test";
 import request from "supertest";
 import conexao from "#db/singleton-connection.js";
-import app from "#src/app.js";
 import assert from "assert";
+import { criarAppTeste } from "#test/utils/create-test-app.js";
 
 describe('Cadastrar autor', () => {
+  const app = criarAppTeste();
+
   // Fecha a conexão com o banco de dados após os testes para evitar conexões pendentes
   after(async () => {
     await conexao.destroy();

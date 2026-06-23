@@ -1,11 +1,23 @@
-import { describe, test, after } from "node:test";
+import { describe, test, after, mock } from "node:test";
 import request from "supertest";
 import conexao from "#db/singleton-connection.js";
-import app from "#src/app.js";
+import criarApp from "#src/app.js";
 import assert from "assert";
 import { criarLivro } from "#test/factories/livro.factory.js";
 
 describe('Registrar venda', () => {
+  const emailGatewayMock = {
+    enviarEmail: mock.fn(),
+  }
+  const estoqueApiGatewayMock = {
+    temEstoque: mock.fn(() => Promise.resolve(true)),
+  }
+
+  const app = criarApp({
+    emailGateway: emailGatewayMock,
+    estoqueApiGateway: estoqueApiGatewayMock
+  })
+
   // Fecha a conexão com o banco de dados após os testes para evitar conexões pendentes
   after(async () => {
     await conexao.destroy();

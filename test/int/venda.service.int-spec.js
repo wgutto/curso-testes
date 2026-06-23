@@ -53,5 +53,36 @@ describe("VendaService", () => {
         mensagem: `Uma nova venda do livro "Livro de Teste" foi registrada com o valor de R$ 95.00.`
       })
     });
+
+    test("Deve retornar um erro caso o livro não tenha estoque", async () => {
+      // arrange
+      // Mock do EmailGateway para verificar se o método enviarEmail foi chamado corretamente
+      const emailGatewayMock = {
+        enviarEmail: mock.fn(),
+      }
+
+      // Stub do EstoqueApiGateway para simular que o livro tem estoque
+      const estoqueApiGatewayMock = {
+        temEstoque: mock.fn(() => Promise.resolve(false)),
+      }
+
+      const sut = new VendasService(conexao, emailGatewayMock, estoqueApiGatewayMock);
+
+      const livro = await criarLivro({
+        titulo: "Livro de Teste",
+      })
+
+      // act
+      const resposta = () => sut.registrarVenda({
+        idLivro: livro.id,
+        modoPagamento: "PIX",
+        valor: 100
+      })
+
+      // assert
+      assert.rejects(resposta, {
+        message: "Livro sem estoque",
+      })
+    });
   })
 });
